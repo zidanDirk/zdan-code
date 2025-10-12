@@ -1,0 +1,19 @@
+{
+  "name": "zdan-code-vscode",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@zdan-code/types": "workspace:^"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/vscode": "^1.105.0",
+    "@vscode/vsce": "^3.6.2"
+  }
+}
