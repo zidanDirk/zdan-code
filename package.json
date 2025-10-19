@@ -1,16 +1,46 @@
 {
   "name": "zdan-code",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A Code Agent VSCode Plugin",
+  "main": "src/dist/extension.js",
+  "packageManager": "pnpm@9.14.4",
+  "activationEvents": [
+    "onView:zdan-code.view",
+    "onStartupFinished"
+  ],
   "scripts": {
+    "build": "turbo build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "zdan-code-ActivityBar",
+          "title": "zdan-code",
+          "icon": "src/assets/icon/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "zdan-code-ActivityBar": [
+        {
+          "id": "zdan-code.SidebarProvider",
+          "type": "webview",
+          "name": "zdan-code"
+        }
+      ]
+    }
+  },
   "keywords": [],
-  "author": "",
+  "author": "zidan.zhang",
   "license": "ISC",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
   "devDependencies": {
     "prettier": "^3.6.2",
+    "tsup": "^8.5.0",
     "turbo": "^2.5.8",
     "typescript": "^5.9.3"
   }
