@@ -1,7 +1,10 @@
 import { ExtensionMessage, WebviewMessage } from "@zdan-code/types";
 import * as vscode from "vscode";
 export class Provider implements vscode.WebviewViewProvider {
-  constructor(private readonly _extensionUri: vscode.Uri) {}
+  constructor(
+    private readonly _extensionUri: vscode.Uri,
+    private readonly _onMessage: (message: WebviewMessage) => void,
+  ) {}
   private _view?: vscode.WebviewView;
   public static readonly viewType = "zdan-code.SidebarProvider";
   public resolveWebviewView(
@@ -17,8 +20,15 @@ export class Provider implements vscode.WebviewViewProvider {
       ],
     };
     webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
-    webviewView.webview.onDidReceiveMessage((data) => {
-      console.log("Received message from webview:", data);
+    webviewView.webview.onDidReceiveMessage((message: WebviewMessage) => {
+      switch (message.type) {
+        case "webviewDidLaunch":
+          console.log("Webview launched");
+          break;
+        case "userMessage":
+          this._onMessage(message);
+          break;
+      }
     });
   }
   private _getHtmlForWebview(webview: vscode.Webview) {
@@ -55,6 +65,7 @@ export class Provider implements vscode.WebviewViewProvider {
       </body>
       </html>`;
   }
+  // 用于向 Webview 发送消息
   public sendMessage(message: ExtensionMessage) {
     this._view?.webview.postMessage(message);
   }
