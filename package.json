@@ -30,6 +30,24 @@
           "name": "zdan-code"
         }
       ]
+    },
+    "configuration": {
+      "title": "zdan-code",
+      "properties": {
+        "zdan-code.apiKey": {
+          "type": "string",
+          "description": "API key for the service."
+        },
+        "zdan-code.baseUrl": {
+          "type": "string",
+          "description": "Base URL for the Qwen service."
+        },
+        "zdan-code.model": {
+          "type": "string",
+          "default": "qwen3-coder-plus",
+          "description": "The model to use for the AI assistant."
+        }
+      }
     }
   },
   "keywords": [],

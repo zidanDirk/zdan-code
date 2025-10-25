@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@zdan-code/types": "workspace:^"
+    "@zdan-code/types": "workspace:^",
+    "openai": "^6.7.0"
   },
   "keywords": [],
   "author": "",
