@@ -1,25 +1,26 @@
-import { useState } from "react";
-
 interface ChatInputProps {
+  value: string;
+  onValueChange: (value: string) => void;
   onSendMessage: (text: string) => void;
 }
 
-export function ChatInput({ onSendMessage }: ChatInputProps) {
-  const [text, setText] = useState("");
-
+export function ChatInput({
+  value,
+  onValueChange,
+  onSendMessage,
+}: ChatInputProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (text.trim()) {
-      onSendMessage(text);
-      setText("");
+    if (value.trim()) {
+      onSendMessage(value);
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <textarea
-        value={text}
-        onChange={(e) => setText(e.target.value)}
+        value={value}
+        onChange={(e) => onValueChange(e.target.value)}
         placeholder="Type a message..."
       />
       <button type="submit">Send</button>

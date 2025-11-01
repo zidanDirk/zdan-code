@@ -48,6 +48,21 @@
           "description": "The model to use for the AI assistant."
         }
       }
+    },
+    "commands": [
+      {
+        "command": "zdan-code.addSelectionToChat",
+        "title": "zdan-code: 将选中内容添加到对话框"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorHasSelection",
+          "command": "zdan-code.addSelectionToChat",
+          "group": "navigation"
+        }
+      ]
     }
   },
   "keywords": [],

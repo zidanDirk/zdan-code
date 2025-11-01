@@ -7,14 +7,26 @@ import "./App.css";
 
 function App() {
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
+  const [inputValue, setInputValue] = useState("");
   const chatContainerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     vscode.postMessage({ type: "webviewDidLaunch" });
 
     const handleMessage = (event: MessageEvent) => {
       const message = event.data;
-      if (message.type === "updateChat") {
-        setMessages(message.payload);
+      switch (message.type) {
+        case "updateChat":
+          setMessages(message.payload);
+          break;
+        case "addContext":
+          const { language, content } = message.payload;
+          const formattedContext = `\`\`\`${language}\n${content}\n\`\`\`\n`;
+          setInputValue(
+            (prev) => `${prev}${prev ? "\n" : ""}${formattedContext}`,
+          );
+          break;
+        default:
+          break;
       }
     };
 
@@ -39,13 +51,18 @@ function App() {
 
   const handleSendMessage = (text: string) => {
     vscode.postMessage({ type: "userMessage", payload: text });
+    setInputValue("");
   };
 
   return (
     <main className="main-window" ref={chatContainerRef}>
       <h1>Hello Zdan Code</h1>
       <ChatHistory messages={messages} />
-      <ChatInput onSendMessage={handleSendMessage}></ChatInput>
+      <ChatInput
+        value={inputValue}
+        onValueChange={setInputValue}
+        onSendMessage={handleSendMessage}
+      ></ChatInput>
     </main>
   );
 }

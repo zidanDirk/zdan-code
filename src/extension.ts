@@ -48,6 +48,16 @@ export function activate(context: vscode.ExtensionContext) {
     }
   });
 
+  vscode.commands.registerCommand("zdan-code.addSelectionToChat", () => {
+    const editor = vscode.window.activeTextEditor;
+    if (editor && !editor.selection.isEmpty) {
+      const selection = editor.document.getText(editor.selection);
+      const path = editor.document.uri.fsPath;
+      const language = editor.document.languageId;
+      provider.addContextToChat({ language, content: selection, path });
+    }
+  });
+
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(Provider.viewType, provider),
   );

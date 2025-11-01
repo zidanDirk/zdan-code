@@ -1,4 +1,8 @@
-import { ExtensionMessage, WebviewMessage } from "@zdan-code/types";
+import {
+  CodeContextPayload,
+  ExtensionMessage,
+  WebviewMessage,
+} from "@zdan-code/types";
 import * as vscode from "vscode";
 export class Provider implements vscode.WebviewViewProvider {
   constructor(
@@ -68,5 +72,9 @@ export class Provider implements vscode.WebviewViewProvider {
   // 用于向 Webview 发送消息
   public sendMessage(message: ExtensionMessage) {
     this._view?.webview.postMessage(message);
+  }
+
+  public addContextToChat(context: CodeContextPayload) {
+    this.sendMessage({ type: "addContext", payload: context });
   }
 }
