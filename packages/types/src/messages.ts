@@ -1,3 +1,5 @@
+import { Todo } from "./tasks";
+
 export interface ChatMessage {
   id: string;
   role: "user" | "assistant";
@@ -15,4 +17,5 @@ export interface CodeContextPayload {
 
 export type ExtensionMessage =
   | { type: "updateChat"; payload: ChatMessage[] }
-  | { type: "addContext"; payload: CodeContextPayload };
+  | { type: "addContext"; payload: CodeContextPayload }
+  | { type: "updateTodos"; payload: Todo[] };

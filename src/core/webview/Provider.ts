@@ -1,6 +1,7 @@
 import {
   CodeContextPayload,
   ExtensionMessage,
+  Todo,
   WebviewMessage,
 } from "@zdan-code/types";
 import * as vscode from "vscode";
@@ -76,5 +77,8 @@ export class Provider implements vscode.WebviewViewProvider {
 
   public addContextToChat(context: CodeContextPayload) {
     this.sendMessage({ type: "addContext", payload: context });
+  }
+  public updateTodos(todos: Todo[]) {
+    this.sendMessage({ type: "updateTodos", payload: todos });
   }
 }
