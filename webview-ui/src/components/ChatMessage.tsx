@@ -12,7 +12,15 @@ export function ChatMessage({ message }: ChatMessageProps) {
 	const messageClass = message.role === 'user' ? 'user-message' : 'assistant-message';
 
 	// 在渲染前移除工具标签
-	const cleanContent = message.content.replace(/<tool_code>[\s\S]*?<\/tool_code>/, '').trim();
+	const cleanContent = message.content
+		.replace(/<tool_code\b[^>]*>[\s\S]*?<\/tool_code>/g, '')
+		.replace(/<tool_result\b[^>]*>[\s\S]*?<\/tool_result>/g, '') // <-- 新增此行
+		.trim();
+
+	console.log(`message.content`, message.content);
+	console.log(`cleanContent`, cleanContent);
+
+	if (!cleanContent) return null; // 如果消息只包含工具调用，则不渲染任何内容
 
 	return (
 		<div className={`message ${messageClass}`}>
