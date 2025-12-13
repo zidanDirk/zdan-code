@@ -1,8 +1,9 @@
 import * as vscode from 'vscode';
 import { Provider } from './core/webview/Provider';
-import { ChatMessage, Todo } from '@zdan-code/types';
+import { ChatMessage, Todo, TodoWriteParameters } from '@zdan-code/types';
 import { getConfig } from './core/config';
 import { streamComplete } from './core/llm/stream';
+import { randomUUID } from 'crypto';
 
 let chatHistory: ChatMessage[] = [];
 let todos: Todo[] = [];
@@ -36,14 +37,21 @@ async function handleUserMessage(provider: Provider, userMessage: string) {
 			assistantMessage.content += token;
 			provider.sendMessage({ type: 'updateChat', payload: chatHistory });
 		}
-		debugger;
-		if (assistantMessage.content.includes('TodoWrite')) {
-			todos = [
-				{ id: '1', content: 'First task from AI', status: 'pending' },
-				{ id: '2', content: 'Second task, in progress', status: 'in_progress' },
-				{ id: '3', content: 'A completed task', status: 'completed' }
-			];
-			provider.updateTodos(todos);
+		// 真实 AI 响应解析
+		const toolCodeMatch = assistantMessage.content.match(/<tool_code>([\s\S]*?)<\/tool_code>/);
+		if (toolCodeMatch) {
+			try {
+				const toolParameters: TodoWriteParameters = JSON.parse(toolCodeMatch[1]);
+				debugger;
+				if (toolParameters.tool_name === 'TodoWrite') {
+					// 使用从 AI 获取的数据更新 todos 状态
+					todos = toolParameters.todos.map((todo) => ({ ...todo, id: randomUUID() }));
+					provider.updateTodos(todos);
+				}
+			} catch (error) {
+				console.error('Failed to parse tool code:', error);
+				// 可以在这里向用户发送一个错误消息
+			}
 		}
 	} catch (error: any) {
 		assistantMessage.content = `Error: ${error.message}`;
